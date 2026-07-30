@@ -146,23 +146,23 @@ genai-rag-telegram-bot/
 
 ### 1. Telegram Start
 
-![Telegram Start](screenshots/01-start.png)
+![Telegram Start](screenshots/GenAI_Assistant_1.png)
 
 ### 2. Telegram Help
 
-![Telegram Help](screenshots/02-help.png)
+![Telegram Help](screenshots/GenAI_Assistant_1.png)
 
 ### 3. Annual Leave Question
 
-![Annual Leave Question](screenshots/03-annual-leave.png)
+![Annual Leave Question](screenshots/GenAI_Assistant_1.png)
 
 ### 4. Dental Insurance Question
 
-![Dental Insurance Question](screenshots/04-dental-insurance.png)
+![Dental Insurance Question](screenshots/GenAI_Assistant_2.png)
 
 ### 5. Out-of-Knowledge Question
 
-![Out-of-Knowledge Question](screenshots/05-out-of-scope.png)
+![Out-of-Knowledge Question](screenshots/GenAI_Assistant_2.png)
 
 ## RAG Pipeline
 
