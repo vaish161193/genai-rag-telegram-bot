@@ -101,22 +101,22 @@ genai-rag-telegram-bot/
 
 The Telegram bot supports both commands and natural-language questions.
 
-### Start
+## Start
 
 ![Telegram Start](screenshots/01-start.png)
 
-### Help
+## Help
 
 ![Telegram Help](screenshots/02-help.png)
 
-### Annual Leave Question
+## Annual Leave Question
 
 ![Annual Leave](screenshots/03-annual-leave.png)
 
-### Dental Insurance Question
+## Dental Insurance Question
 
 ![Dental Insurance](screenshots/04-dental-insurance.png)
 
-### Out-of-Knowledge Question
+## Out-of-Knowledge Question
 
 ![Out of Knowledge](screenshots/05-out-of-scope.png)
