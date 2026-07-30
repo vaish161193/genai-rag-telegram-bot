@@ -96,3 +96,27 @@ genai-rag-telegram-bot/
 │   └── faq.md
 │
 └── rag.db
+
+## Demo
+
+The Telegram bot supports both commands and natural-language questions.
+
+### Start
+
+![Telegram Start](screenshots/01-start.png)
+
+### Help
+
+![Telegram Help](screenshots/02-help.png)
+
+### Annual Leave Question
+
+![Annual Leave](screenshots/03-annual-leave.png)
+
+### Dental Insurance Question
+
+![Dental Insurance](screenshots/04-dental-insurance.png)
+
+### Out-of-Knowledge Question
+
+![Out of Knowledge](screenshots/05-out-of-scope.png)
