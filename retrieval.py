@@ -1,71 +1,85 @@
-from pathlib import Path
+import json
+import sqlite3
 
-from sentence_transformers import SentenceTransformer, util
+import numpy as np
+from sentence_transformers import SentenceTransformer
 
-from ingest import chunk_markdown
 
-
-DATA_FOLDER = Path("data")
+DATABASE = "rag.db"
 MODEL_NAME = "all-MiniLM-L6-v2"
 
 
-def load_chunks():
-    all_chunks = []
+def load_chunks_from_database():
+    connection = sqlite3.connect(DATABASE)
+    cursor = connection.cursor()
 
-    for file_path in sorted(DATA_FOLDER.glob("*.md")):
-        text = file_path.read_text(encoding="utf-8")
-        chunks = chunk_markdown(text)
-
-        for chunk in chunks:
-            all_chunks.append(
-                {
-                    "source": file_path.name,
-                    "text": chunk,
-                }
-            )
-
-    return all_chunks
-
-
-def retrieve(query, chunks, model, top_k=3):
-    texts = [chunk["text"] for chunk in chunks]
-
-    chunk_embeddings = model.encode(
-        texts,
-        convert_to_tensor=True,
-        normalize_embeddings=True,
+    cursor.execute(
+        """
+        SELECT id, source, text, embedding
+        FROM chunks
+        """
     )
 
-    query_embedding = model.encode(
-        query,
-        convert_to_tensor=True,
-        normalize_embeddings=True,
-    )
+    rows = cursor.fetchall()
+    connection.close()
 
-    scores = util.cos_sim(query_embedding, chunk_embeddings)[0]
+    chunks = []
 
-    top_results = scores.argsort(descending=True)[:top_k]
+    for row in rows:
+        chunk_id, source, text, embedding_json = row
 
-    results = []
-
-    for index in top_results:
-        index = int(index)
-
-        results.append(
+        chunks.append(
             {
-                "source": chunks[index]["source"],
-                "text": chunks[index]["text"],
-                "score": float(scores[index]),
+                "id": chunk_id,
+                "source": source,
+                "text": text,
+                "embedding": np.array(json.loads(embedding_json)),
             }
         )
 
-    return results
+    return chunks
+
+
+def cosine_similarity(query_vector, chunk_vector):
+    return np.dot(query_vector, chunk_vector) / (
+        np.linalg.norm(query_vector) * np.linalg.norm(chunk_vector)
+    )
+
+
+def retrieve(query, chunks, model, top_k=3):
+    query_embedding = model.encode(
+        query,
+        normalize_embeddings=True,
+    )
+
+    results = []
+
+    for chunk in chunks:
+        score = cosine_similarity(
+            query_embedding,
+            chunk["embedding"],
+        )
+
+        results.append(
+            {
+                "source": chunk["source"],
+                "text": chunk["text"],
+                "score": float(score),
+            }
+        )
+
+    results.sort(
+        key=lambda result: result["score"],
+        reverse=True,
+    )
+
+    return results[:top_k]
 
 
 def main():
     model = SentenceTransformer(MODEL_NAME)
 
-    chunks = load_chunks()
+    chunks = load_chunks_from_database()
 
     query = "How many vacation days do employees get?"
 
