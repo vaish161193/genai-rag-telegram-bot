@@ -1,108 +1,98 @@
-\# GenAI Mini-RAG Telegram Bot
+# GenAI Mini-RAG Telegram Bot
 
+A lightweight Retrieval-Augmented Generation (RAG) Telegram chatbot built with Python.
 
+The bot answers employee-policy questions using a small local knowledge base, semantic retrieval, SQLite storage, and a local Llama 3.2 model through Ollama.
 
-A lightweight Retrieval-Augmented Generation (RAG) Telegram bot built with Python.
+## Project Overview
 
+This project demonstrates an end-to-end Mini-RAG pipeline:
 
-
-\## Project Overview
-
-
-
-This project implements a Telegram chatbot that retrieves relevant information
-
-from a small local knowledge base and uses an LLM to generate an answer.
-
-
-
-\## Architecture
-
-
-
-Telegram User
-
-&#x20;   ↓
-
+User Question
+    ↓
 Telegram Bot
-
-&#x20;   ↓
-
-Query
-
-&#x20;   ↓
-
-Embedding Model
-
-&#x20;   ↓
-
+    ↓
+Sentence Transformer Embedding
+    ↓
 SQLite Knowledge Base
+    ↓
+Semantic Similarity Retrieval
+    ↓
+Relevant Context
+    ↓
+Llama 3.2 via Ollama
+    ↓
+Grounded Answer
+    ↓
+Telegram
 
-&#x20;   ↓
+The system is designed to answer only questions supported by the knowledge base. Questions outside the knowledge base are rejected using a similarity threshold.
 
-Top-K Relevant Chunks
+## Features
 
-&#x20;   ↓
+- Telegram chatbot interface
+- `/start` command
+- `/help` command
+- `/ask <question>` command
+- Natural-language questions without `/ask`
+- 4 Markdown knowledge documents
+- Markdown section-based chunking
+- Local embeddings using `all-MiniLM-L6-v2`
+- 384-dimensional sentence embeddings
+- SQLite-based local storage
+- Semantic similarity retrieval
+- Top-k retrieval
+- Relevance threshold to reduce unsupported answers
+- Local Llama 3.2 3B model through Ollama
+- Source document shown with answers
+- CLI demo for testing the RAG engine without Telegram
 
-LLM
+## Knowledge Base
 
-&#x20;   ↓
+The project contains four sample company-policy documents:
 
-Generated Answer
+- `leave_policy.md`
+- `benefits.md`
+- `work_from_home.md`
+- `faq.md`
 
-&#x20;   ↓
+The documents are divided into 18 searchable chunks.
 
-Telegram User
+## Technology Stack
 
+| Component | Technology |
+|---|---|
+| Language | Python 3.11 |
+| Telegram | python-telegram-bot |
+| Embeddings | Sentence Transformers |
+| Embedding Model | all-MiniLM-L6-v2 |
+| Vector Size | 384 |
+| Database | SQLite |
+| LLM Runtime | Ollama |
+| LLM | Llama 3.2 3B |
+| Configuration | python-dotenv |
 
+## Project Structure
 
-\## Planned Features
-
-
-
-\- `/start` - Start the bot
-
-\- `/help` - Show available commands
-
-\- `/ask <query>` - Ask a question using RAG
-
-\- Retrieve relevant document chunks
-
-\- Generate answers using an LLM
-
-\- Show source snippets
-
-
-
-\## Technology Stack
-
-
-
-\- Python
-
-\- Telegram Bot API
-
-\- python-telegram-bot
-
-\- Sentence Transformers
-
-\- SQLite
-
-\- Large Language Model
-
-
-
-\## Project Status
-
-
-
-🚧 Currently under development.
-
-
-
-\## Author
-
-
-
-Vaishnavi Muralidharan
-
+```text
+genai-rag-telegram-bot/
+│
+├── app.py
+├── rag.py
+├── retrieval.py
+├── database.py
+├── ingest.py
+├── embeddings.py
+├── llm.py
+├── demo.py
+├── requirements.txt
+├── README.md
+├── .gitignore
+│
+├── data/
+│   ├── leave_policy.md
+│   ├── benefits.md
+│   ├── work_from_home.md
+│   └── faq.md
+│
+└── rag.db
